@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct NoteThisApp: App {
+    @StateObject var noteThisVM = NoteThisViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(noteThisVM)
         }
     }
 }
