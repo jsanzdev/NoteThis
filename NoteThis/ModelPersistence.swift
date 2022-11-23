@@ -15,7 +15,7 @@ extension URL {
 
 final class ModelPersistence {
     
-    func loadNotes(url:URL = .notesDataURL) -> [Note] {
+    func loadFolders(url:URL = .notesDataURL) -> [Folder] {
         var urlData = URL.notesDocsURL
         if !FileManager.default.fileExists(atPath: urlData.path())
         {
@@ -23,16 +23,16 @@ final class ModelPersistence {
         }
         do {
             let data = try Data(contentsOf: urlData)
-            return try JSONDecoder().decode([Note].self, from: data)
+            return try JSONDecoder().decode([Folder].self, from: data)
         } catch {
             print("Load error \(error)")
             return []
         }
     }
     
-    func saveNotes(notes: [Note]) {
+    func saveFolders(folders: [Folder]) {
         do {
-            let data = try JSONEncoder().encode(notes)
+            let data = try JSONEncoder().encode(folders)
             try data.write(to: .notesDocsURL, options: [.atomic, .completeFileProtection])
         } catch {
             print("Error saving data \(error)")

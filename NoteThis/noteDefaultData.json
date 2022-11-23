@@ -1,14 +1,38 @@
 [
   {
     "id": 1,
-    "title": "This is the title of a note",
-    "content": "This is the content of a note",
-    "date": "2022-01-01 00:00:00"
+    "name": "Starter Notes",
+    "notes": [
+      {
+        "id": 1,
+        "title": "This is the title of a note",
+        "content": "This is the content of a note",
+        "date": "2022-01-01 00:00:00"
+      },
+      {
+        "id": 2,
+        "title": "This is the title of another note",
+        "content": "This is the content of another note",
+        "date": "2022-01-02 00:00:00"
+      }
+    ]
   },
   {
     "id": 2,
-    "title": "This is the title of another note",
-    "content": "This is the content of another note",
-    "date": "2022-01-02 00:00:00"
+    "name": "Other Notes",
+    "notes": [
+      {
+        "id": 1,
+        "title": "Another note",
+        "content": "This is the content of a note",
+        "date": "2022-01-01 00:00:00"
+      },
+      {
+        "id": 2,
+        "title": "Another note 2",
+        "content": "This is the content of another note",
+        "date": "2022-01-02 00:00:00"
+      }
+    ]
   }
 ]

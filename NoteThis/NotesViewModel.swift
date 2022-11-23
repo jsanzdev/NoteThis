@@ -7,22 +7,24 @@
 
 import SwiftUI
 
-final class NoteThisViewModel:ObservableObject {
+final class NotesViewModel:ObservableObject {
+    
     enum SortType: String, CaseIterable {
         case name = "By Name"
         case date = "By Date"
         case none = "None"
     }
     
-    let persistence = ModelPersistence()
-    
     @Published var notes:[Note] {
         didSet {
-            persistence.saveNotes(notes: notes)
+            modelFolder.saveNotes(notes: notes)
         }
     }
+    
     @Published var search = ""
     @Published var sortType:SortType = .none
+    
+    let modelFolder = FoldersViewModel()
     
     @Published var showDeleteConfirmation = false
     var message = ""
@@ -39,6 +41,10 @@ final class NoteThisViewModel:ObservableObject {
         }
     }
     
+    init() {
+        notes = modelFolder.loadNotes()
+    }
+    
     var orederedNotes:[Note] {
         switch sortType {
         case .name:
@@ -53,11 +59,7 @@ final class NoteThisViewModel:ObservableObject {
             return filterNotes
         }
     }
-    
-    init() {
-        self.notes = persistence.loadNotes()
-    }
-    
+
     func removeConfirmationNote(note:Note) {
         noteToDelete = note
         message = "Are you sure you want to delete the note \(note.title)?"
@@ -83,10 +85,7 @@ final class NoteThisViewModel:ObservableObject {
             notes[index] = note
         }
     }
-    
-    
-    
-    
+
     
     
 }

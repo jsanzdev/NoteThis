@@ -6,33 +6,34 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
-    @EnvironmentObject var noteThisVM:NoteThisViewModel
-    @State var path:[Note] = []
+    @EnvironmentObject var foldersVM:FoldersViewModel
+    @State var path:[Folder] = []
     
-    @State var addNote = false
+    @State var addFolder = false
     
     var body: some View {
         NavigationStack(path: $path) {
             List {
-                ForEach(noteThisVM.orederedNotes) { note in
-                    NavigationLink(value: note) {
-                        NoteCell(note: note)
+                ForEach(foldersVM.orederedFolder) { folder in
+                    NavigationLink(value: folder) {
+                        FolderCell(folder: folder)
                     }
                 }
             }
-            .navigationDestination(for: Note.self) { note in
-                NoteDetailView(note: note)
+            .navigationDestination(for: Folder.self) { folder in
+                FolderView(folder: folder)
             }
             .navigationTitle("Note This")
-            .searchable(text: $noteThisVM.search)
+            .searchable(text: $foldersVM.search)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Menu("Sort") {
-                        ForEach(NoteThisViewModel.SortType.allCases, id:\.self) { option in
+                        ForEach(FoldersViewModel.SortType.allCases, id:\.self) { option in
                             Button {
-                                noteThisVM.sortType = option
+                                foldersVM.sortType = option
                             } label: {
                                 Text(option.rawValue)
                             }
@@ -41,7 +42,7 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        addNote.toggle()
+                        addFolder.toggle()
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -49,15 +50,16 @@ struct ContentView: View {
                 }
                 
             }
+            .sheet(isPresented: $addFolder) {
+                FolderSheet()
+            }
         }
-        
-        
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(NoteThisViewModel())
+            .environmentObject(FoldersViewModel())
     }
 }

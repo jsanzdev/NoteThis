@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct NoteDetailView: View {
-    @EnvironmentObject var noteThisVM:NoteThisViewModel
+    @EnvironmentObject var foldersVM:FoldersViewModel
+    @ObservedObject var notesVM:NotesViewModel
     @StateObject var detailVM = DetailViewModel()
     @Environment(\.dismiss) var dismiss
     
@@ -16,16 +17,14 @@ struct NoteDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            TextEditor(text: $detailVM.title)
-                .lineLimit(1, reservesSpace: true)
+            TextField("This is the title", text: $detailVM.title, axis: .vertical)
                 .font(.title)
-                .frame(height: 50)
             TextEditor(text: $detailVM.content)
         }
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button {
-                    noteThisVM.updateNote(note: detailVM.saveNote(note: note))
+                    notesVM.updateNote(note: detailVM.saveNote(note: note))
                     dismiss()
                 } label: {
                     Text("Save")
@@ -42,8 +41,8 @@ struct NoteDetailView: View {
 struct NoteDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            NoteDetailView(note: .noteTest)
-                .environmentObject(NoteThisViewModel())
+            NoteDetailView(notesVM: NotesViewModel(), note: .noteTest)
+                .environmentObject(FoldersViewModel())
         }
     }
 }
