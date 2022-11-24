@@ -17,12 +17,14 @@ final class NotesViewModel:ObservableObject {
     
     @Published var notes:[Note] {
         didSet {
-            modelFolder.saveNotes(notes: notes)
+            modelFolder.saveNotes(notes: notes, id: folderID)
         }
     }
     
     @Published var search = ""
     @Published var sortType:SortType = .none
+    
+    @Published var folderID:UUID
     
     let modelFolder = FoldersViewModel()
     
@@ -43,6 +45,7 @@ final class NotesViewModel:ObservableObject {
     
     init() {
         notes = modelFolder.loadNotes()
+        folderID = modelFolder.ID
     }
     
     var orederedNotes:[Note] {
@@ -78,7 +81,6 @@ final class NotesViewModel:ObservableObject {
     func deleteNote(indexSet:IndexSet) {
         notes.remove(atOffsets: indexSet)
     }
-    
     
     func updateNote(note:Note) {
         if let index = notes.firstIndex(where: {$0.id == note.id }) {

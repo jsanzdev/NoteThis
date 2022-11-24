@@ -21,6 +21,7 @@ struct ContentView: View {
                     NavigationLink(value: folder) {
                         FolderCell(folder: folder)
                     }
+                    .isDetailLink(false)
                 }
             }
             .navigationDestination(for: Folder.self) { folder in

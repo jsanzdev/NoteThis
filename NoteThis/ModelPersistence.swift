@@ -16,10 +16,10 @@ extension URL {
 final class ModelPersistence {
     
     func loadFolders(url:URL = .notesDataURL) -> [Folder] {
-        var urlData = URL.notesDocsURL
+        let urlData = URL.notesDocsURL
         if !FileManager.default.fileExists(atPath: urlData.path())
         {
-            urlData = url
+            saveFolders(folders: [Folder(id: UUID(), name: "Starter Notes", notes: [Note(id: UUID(), title:"This is the title of the Note", content: "This is the content of the note. As you can see is full of stuff :)", date: "2022-01-02 00:00:00"), Note(id: UUID(), title:"This is the title of the Second Note", content: "This is the content of the second note. As you can see is full of stuff :)", date: "2022-01-03 00:00:00") ])])
         }
         do {
             let data = try Data(contentsOf: urlData)

@@ -23,7 +23,7 @@ struct FolderView: View {
                 ForEach(folder.notes) { note in
                     NavigationLink(value: note) {
                         NoteCell(note: note)
-                    }
+                    }.isDetailLink(false)
                 }
             }
             .navigationDestination(for: Note.self) { note in

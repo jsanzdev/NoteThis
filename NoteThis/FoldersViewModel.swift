@@ -19,6 +19,8 @@ final class FoldersViewModel:ObservableObject {
         case none = "None"
     }
     
+    
+    @Published var ID:Folder.ID
     @Published var name = ""
     @Published var notes:Notes = []
     
@@ -62,15 +64,21 @@ final class FoldersViewModel:ObservableObject {
     
     init() {
         self.folders = persistence.loadFolders()
-        self.notes = loadNotes()
+        self.ID = UUID()
+    }
+    
+    func getFolderFromID(id: UUID) -> Folder? {
+        folders.first(where: { $0.id == id })
     }
     
     func loadNotes() -> [Note] {
         return self.notes
     }
     
-    func saveNotes(notes:Notes) {
-        self.notes = notes
+    func saveNotes(notes:Notes, id: UUID) {
+        guard let folder = getFolderFromID(id: id) else { return }
+        let newFolder = Folder(id: folder.id, name: folder.name, notes: notes)
+        updateFolder(folder: newFolder)
     }
     
     func removeConfirmationFolder(folder:Folder) {
