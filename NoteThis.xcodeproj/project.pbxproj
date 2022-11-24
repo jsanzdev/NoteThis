@@ -96,7 +96,6 @@
 			isa = PBXGroup;
 			children = (
 				098C2F1C2926E14800BB8871 /* ContentView.swift */,
-				09369B80292E9229000B9A6B /* FolderSheet.swift */,
 				09C74B86292D23A6007BCF86 /* FolderView.swift */,
 				093148132928D26E0063EDD8 /* NoteDetailView.swift */,
 			);
@@ -142,6 +141,7 @@
 		098C2F2D2926E39200BB8871 /* ViewComponents */ = {
 			isa = PBXGroup;
 			children = (
+				09369B80292E9229000B9A6B /* FolderSheet.swift */,
 				098C2F362926EC5000BB8871 /* NoteCell.swift */,
 				09C74B8A292D2AB5007BCF86 /* FolderCell.swift */,
 			);

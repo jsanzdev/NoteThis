@@ -10,12 +10,12 @@ import Combine
 
 struct ContentView: View {
     @EnvironmentObject var foldersVM:FoldersViewModel
-    @State var path:[Folder] = []
+    @State var folderPath:[Folder] = []
     
     @State var addFolder = false
     
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack(path: $folderPath) {
             List {
                 ForEach(foldersVM.orederedFolder) { folder in
                     NavigationLink(value: folder) {

@@ -11,14 +11,14 @@ import Combine
 struct FolderView: View {
     @EnvironmentObject var foldersVM:FoldersViewModel
     @ObservedObject var notesVM = NotesViewModel()
-    @State var path:[Note] = []
+    @State var notePath:[Note] = []
     
     let folder:Folder
     
     @State var addNote = false
     
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack(path: $notePath) {
             List {
                 ForEach(folder.notes) { note in
                     NavigationLink(value: note) {

@@ -31,26 +31,6 @@ struct FolderSheet: View {
                 
                 TextField("Folder Name..", text: $foldersVM.name)
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Menu("Sort") {
-                        ForEach(NotesViewModel.SortType.allCases, id:\.self) { option in
-                            Button {
-                                
-                            } label: {
-                                Text("Cancel")
-                            }
-                        }
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button {
-                        
-                    } label: {
-                        Text("Add")
-                    }
-                }
-            }
     }
 }
 
