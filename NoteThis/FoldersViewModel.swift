@@ -5,7 +5,7 @@
 //  Created by Jesus Sanz on 22/11/22.
 //
 
-import Foundation
+import SwiftUI
 
 final class FoldersViewModel:ObservableObject {
     enum SortType: String, CaseIterable {
@@ -20,7 +20,6 @@ final class FoldersViewModel:ObservableObject {
     }
     
     
-    @Published var ID:Folder.ID
     @Published var name = ""
     @Published var notes:Notes = []
     
@@ -33,14 +32,16 @@ final class FoldersViewModel:ObservableObject {
     }
     @Published var search = ""
     @Published var sortType:SortType = .none
-    
     @Published var noteSortType:NoteSortType = .none
     
     @Published var showDeleteConfirmation = false
     var message = ""
     
     var selectedFolder:Folder?
+    var selectedNote:Note?
     
+    
+    /// Filtering Folders for Searching
     var filterFolders:[Folder] {
         if search.isEmpty {
             return folders
@@ -51,6 +52,7 @@ final class FoldersViewModel:ObservableObject {
         }
     }
     
+    /// Ordering Folders
     var orederedFolder:[Folder] {
         switch sortType {
         case .name:
@@ -62,9 +64,40 @@ final class FoldersViewModel:ObservableObject {
         }
     }
     
+    /// This Filters de Notes for Searching
+    var filterNotes:[Note] {
+        if search.isEmpty {
+            return self.notes
+        } else {
+            return self.notes.filter {
+                $0.title.lowercased().hasPrefix(search.lowercased())
+            }
+        }
+    }
+    
+    /// This is the order for the notes.
+    var orederedNotes:[Note] {
+        switch noteSortType {
+        case .name:
+            return filterNotes.sorted {
+                $0.title < $1.title
+            }
+        case .date:
+            return filterNotes.sorted {
+                $0.date > $1.date
+            }
+        case .none:
+            return filterNotes
+        }
+    }
+    
     init() {
         self.folders = persistence.loadFolders()
-        self.ID = UUID()
+    }
+    
+    func initFolder(folder: Folder) {
+        name = folder.name
+        notes = folder.notes
     }
     
     func getFolderFromID(id: UUID) -> Folder? {
@@ -75,11 +108,10 @@ final class FoldersViewModel:ObservableObject {
         return self.notes
     }
     
-    func saveNotes(notes:Notes, id: UUID) {
-        guard let folder = getFolderFromID(id: id) else { return }
-        let newFolder = Folder(id: folder.id, name: folder.name, notes: notes)
-        updateFolder(folder: newFolder)
-    }
+//    func saveNotes(notes:Notes) {
+//        if let index = self.notes.firstIndex(where: {$0.id == notes.id }) {
+//            self.notes[index] = notes
+//    }
     
     func removeConfirmationFolder(folder:Folder) {
         selectedFolder = folder
@@ -100,10 +132,20 @@ final class FoldersViewModel:ObservableObject {
         folders.remove(atOffsets: indexSet)
     }
     
+    func deleteNote(indexSet:IndexSet) {
+        self.notes.remove(atOffsets: indexSet)
+    }
+    
     
     func updateFolder(folder:Folder) {
         if let index = folders.firstIndex(where: {$0.id == folder.id }) {
             folders[index] = folder
+        }
+    }
+    
+    func updateNote(note:Note) {
+        if let index = self.notes.firstIndex(where: {$0.id == note.id }) {
+            self.notes[index] = note
         }
     }
     

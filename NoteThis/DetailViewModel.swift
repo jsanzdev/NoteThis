@@ -8,9 +8,19 @@
 import SwiftUI
 
 final class DetailViewModel:ObservableObject {
+    
     @Published var title = ""
     @Published var content = ""
     @Published var date = ""
+    
+    let note:Note
+    
+    init(note:Note) {
+        self.note = note
+        title = note.title
+        content = note.content
+        date = note.date
+    }
     
     func initNote(note:Note) {
         title = note.title

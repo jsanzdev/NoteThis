@@ -10,33 +10,28 @@ import Combine
 
 struct FolderView: View {
     @EnvironmentObject var foldersVM:FoldersViewModel
-    @ObservedObject var notesVM = NotesViewModel()
-    @State var notePath:[Note] = []
     
     let folder:Folder
     
     @State var addNote = false
     
     var body: some View {
-        NavigationStack(path: $notePath) {
-            List {
-                ForEach(folder.notes) { note in
+            List(foldersVM.notes) { note in
                     NavigationLink(value: note) {
                         NoteCell(note: note)
-                    }.isDetailLink(false)
-                }
+                    }
             }
+            .navigationTitle($foldersVM.name)
+            .searchable(text: $foldersVM.search)
             .navigationDestination(for: Note.self) { note in
-                NoteDetailView(notesVM: NotesViewModel(), note: note)
+                NoteDetailView(detailVM: DetailViewModel(note: note), note: note)
             }
-            .navigationTitle(folder.name)
-            .searchable(text: $notesVM.search)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .confirmationAction) {
                     Menu("Sort") {
-                        ForEach(NotesViewModel.SortType.allCases, id:\.self) { option in
+                        ForEach(FoldersViewModel.NoteSortType.allCases, id:\.self) { option in
                             Button {
-                                notesVM.sortType = option
+                                foldersVM.noteSortType = option
                             } label: {
                                 Text(option.rawValue)
                             }
@@ -51,9 +46,12 @@ struct FolderView: View {
                     }
                 }
             }
-        }
+            .onAppear {
+                foldersVM.initFolder(folder: folder)
+            }
     }
 }
+
 
 struct FolderView_Previews: PreviewProvider {
     static var previews: some View {

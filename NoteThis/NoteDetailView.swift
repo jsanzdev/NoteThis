@@ -9,8 +9,7 @@ import SwiftUI
 
 struct NoteDetailView: View {
     @EnvironmentObject var foldersVM:FoldersViewModel
-    @ObservedObject var notesVM:NotesViewModel
-    @StateObject var detailVM = DetailViewModel()
+    @ObservedObject var detailVM:DetailViewModel
     @Environment(\.dismiss) var dismiss
     
     let note:Note
@@ -24,7 +23,7 @@ struct NoteDetailView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button {
-                    notesVM.updateNote(note: detailVM.saveNote(note: note))
+                    foldersVM.updateNote(note: detailVM.saveNote(note: note))
                     dismiss()
                 } label: {
                     Text("Save")
@@ -41,7 +40,7 @@ struct NoteDetailView: View {
 struct NoteDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            NoteDetailView(notesVM: NotesViewModel(), note: .noteTest)
+            NoteDetailView(detailVM: DetailViewModel(note: .noteTest), note: .noteTest)
                 .environmentObject(FoldersViewModel())
         }
     }

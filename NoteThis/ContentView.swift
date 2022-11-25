@@ -21,16 +21,15 @@ struct ContentView: View {
                     NavigationLink(value: folder) {
                         FolderCell(folder: folder)
                     }
-                    .isDetailLink(false)
                 }
             }
             .navigationDestination(for: Folder.self) { folder in
                 FolderView(folder: folder)
             }
-            .navigationTitle("Note This")
+            .navigationTitle("Folders")
             .searchable(text: $foldersVM.search)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .confirmationAction) {
                     Menu("Sort") {
                         ForEach(FoldersViewModel.SortType.allCases, id:\.self) { option in
                             Button {
