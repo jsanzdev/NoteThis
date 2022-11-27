@@ -12,25 +12,36 @@ struct FolderSheet: View {
     @EnvironmentObject var foldersVM:FoldersViewModel
     @Environment(\.dismiss) var dismiss
     
+    @State var newFolderName = ""
+    
     var body: some View {
-            VStack {
-                HStack {
-                    Button {
-                        dismiss()
-                    } label: {
-                     Text("Canel")
-                    }
-                    Text("New Folder")
-                        .font(.headline)
-                    Button {
-                        // We call the function to add the folder
-                    } label: {
-                     Text("OK")
-                    }
+        Group {
+            TextField("Folder Name..", text: $newFolderName)
+                .textFieldStyle(.roundedBorder)
+                .padding()
+        }
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button {
+                    dismiss()
+                } label: {
+                    Text("Cancel")
                 }
-                
-                TextField("Folder Name..", text: $foldersVM.name)
             }
+            ToolbarItem {
+                Text("New Folder")
+                    .font(.headline)
+            }
+            ToolbarItem(placement: .confirmationAction) {
+                Button {
+                    foldersVM.createFolder(name: newFolderName)
+                    dismiss()
+                } label: {
+                    Text("OK")
+                }
+            }
+        }
+        
     }
 }
 

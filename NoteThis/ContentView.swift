@@ -10,12 +10,13 @@ import Combine
 
 struct ContentView: View {
     @EnvironmentObject var foldersVM:FoldersViewModel
-    @State var folderPath:[Folder] = []
+    @EnvironmentObject var router: Router
+    //@State var folderPath:[Folder] = []
     
     @State var addFolder = false
     
     var body: some View {
-        NavigationStack(path: $folderPath) {
+        NavigationStack(path: $router.path) {
             List {
                 ForEach(foldersVM.orederedFolder) { folder in
                     NavigationLink(value: folder) {
@@ -44,15 +45,14 @@ struct ContentView: View {
                     Button {
                         addFolder.toggle()
                     } label: {
-                        Image(systemName: "plus")
+                        Image(systemName: "folder.badge.plus")
                     }
-                    
                 }
-                
             }
-            .sheet(isPresented: $addFolder) {
-                FolderSheet()
-            }
+        }
+        .sheet(isPresented: $addFolder) {
+            FolderSheet()
+                .presentationDetents([.large, .medium, .fraction(0.25)])
         }
     }
 }
@@ -61,5 +61,6 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .environmentObject(FoldersViewModel())
+            .environmentObject(Router())
     }
 }

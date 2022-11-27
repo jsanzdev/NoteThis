@@ -31,4 +31,8 @@ final class DetailViewModel:ObservableObject {
     func saveNote(note:Note) -> Note {
         Note(id: note.id, title: title, content: content, date: date)
     }
+    
+    func newNote(title:String, content:String) -> Note {
+        Note(id: UUID(), title: title, content: content, date:"2022-01-02 00:00:00")
+    }
 }

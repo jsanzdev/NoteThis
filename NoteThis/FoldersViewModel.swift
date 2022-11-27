@@ -21,7 +21,11 @@ final class FoldersViewModel:ObservableObject {
     
     
     @Published var name = ""
-    @Published var notes:Notes = []
+    @Published var notes:Notes = [] {
+        didSet {
+            persistence.saveFolders(folders: folders)
+        }
+    }
     
     let persistence = ModelPersistence()
     
@@ -100,6 +104,10 @@ final class FoldersViewModel:ObservableObject {
         notes = folder.notes
     }
     
+    func createFolder(name:String) {
+        folders.append(Folder(id: UUID(), name: name, notes: []))
+    }
+    
     func getFolderFromID(id: UUID) -> Folder? {
         folders.first(where: { $0.id == id })
     }
@@ -136,11 +144,14 @@ final class FoldersViewModel:ObservableObject {
         self.notes.remove(atOffsets: indexSet)
     }
     
-    
     func updateFolder(folder:Folder) {
         if let index = folders.firstIndex(where: {$0.id == folder.id }) {
             folders[index] = folder
         }
+    }
+    
+    func addNote(note:Note) {
+        self.notes.append(note)
     }
     
     func updateNote(note:Note) {

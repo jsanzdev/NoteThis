@@ -16,39 +16,40 @@ struct FolderView: View {
     @State var addNote = false
     
     var body: some View {
-            List(foldersVM.notes) { note in
-                    NavigationLink(value: note) {
-                        NoteCell(note: note)
-                    }
+        List(foldersVM.notes) { note in
+            NavigationLink(value: note) {
+                NoteCell(note: note)
             }
-            .navigationTitle($foldersVM.name)
-            .searchable(text: $foldersVM.search)
-            .navigationDestination(for: Note.self) { note in
-                NoteDetailView(detailVM: DetailViewModel(note: note), note: note)
-            }
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Menu("Sort") {
-                        ForEach(FoldersViewModel.NoteSortType.allCases, id:\.self) { option in
-                            Button {
-                                foldersVM.noteSortType = option
-                            } label: {
-                                Text(option.rawValue)
-                            }
+        }
+        .navigationTitle($foldersVM.name)
+        .searchable(text: $foldersVM.search)
+        .navigationDestination(for: Note.self) { note in
+            NoteDetailView(detailVM: DetailViewModel(note: note), note: note)
+        }
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Menu("Sort") {
+                    ForEach(FoldersViewModel.NoteSortType.allCases, id:\.self) { option in
+                        Button {
+                            foldersVM.noteSortType = option
+                        } label: {
+                            Text(option.rawValue)
                         }
                     }
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button {
-                        addNote.toggle()
-                    } label: {
-                        Image(systemName: "plus")
-                    }
+            }
+            ToolbarItem(placement: .confirmationAction) {
+                Button {
+                    var newNote = Note(id: UUID(), title: "", content: "", date: "")
+                    NoteDetailView(detailVM: DetailViewModel(note: newNote), note: newNote)
+                } label: {
+                    Image(systemName: "square.and.pencil")
                 }
             }
-            .onAppear {
-                foldersVM.initFolder(folder: folder)
-            }
+        }
+        .onAppear {
+            foldersVM.initFolder(folder: folder)
+        }
     }
 }
 
