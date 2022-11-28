@@ -10,6 +10,7 @@ import Combine
 
 struct FolderView: View {
     @EnvironmentObject var foldersVM:FoldersViewModel
+    @EnvironmentObject var router: Router
     
     let folder:Folder
     
@@ -40,8 +41,9 @@ struct FolderView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button {
-                    var newNote = Note(id: UUID(), title: "", content: "", date: "")
-                    NoteDetailView(detailVM: DetailViewModel(note: newNote), note: newNote)
+                    let newNote = Note(id: UUID(), title: "", content: "", date: "")
+                    router.path.append(newNote)
+                    //NoteDetailView(detailVM: DetailViewModel(note: newNote), note: newNote)
                 } label: {
                     Image(systemName: "square.and.pencil")
                 }
